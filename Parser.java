@@ -80,7 +80,7 @@ public class Parser {
 		}
 		try {
 			idSize=heapSource.readInt();
-			heapSource.skip(8);
+			heapSource.skipNBytes(8);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -110,7 +110,7 @@ public class Parser {
 	}
 	
 	public int TagLength() throws IOException {
-		heapSource.skipBytes(4);		//SKIP 4 bytes which contains microSince
+		heapSource.skipNBytes(4);		//SKIP 4 bytes which contains microSince
 		return heapSource.readInt();
 	}
 	
@@ -124,6 +124,7 @@ public class Parser {
 		return b;
 	}
 	
+	
 	public byte readByte() throws IOException {
 		return heapSource.readByte();
 	}
@@ -136,6 +137,10 @@ public class Parser {
 		return heapSource.readFloat();
 	}
 	
+	public double readDouble() throws IOException {
+		return heapSource.readDouble();
+	}
+	
 	public int readInt() throws IOException {
 		return heapSource.readInt();
 	}
@@ -144,11 +149,21 @@ public class Parser {
 		return heapSource.readLong();
 	}
 	
+	
 	public void write(String a) {
 		try {
 			out.write(a + '\n');
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void writeWonewLine(String a) {
+		try {
+			out.write(a);
+		}
+		catch(IOException e) {
 			e.printStackTrace();
 		}
 	}

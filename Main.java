@@ -1,12 +1,9 @@
-import java.lang.*;
 import java.io.*;
-import java.util.*;
+import java.nio.charset.Charset;
 
-public class Main extends HeapProcess {
+public class Main extends HeapProcess{
 	private static String heapFilename;
 	private static String outFilename;
-	private static Parser parser;
-	private static int idSize;
 	
 	static final int STRING = 1;
     static final int LOAD_CLASS = 2;
@@ -23,7 +20,7 @@ public class Main extends HeapProcess {
     private static final int CPU_SAMPLES = 0xd;
     private static final int CONTROL_SETTINGS = 0xe;
     
-    public static int dataLen;
+    
 	
 	public static void main(String[] args) throws IOException {
 		if(args.length != 2) {
@@ -66,7 +63,8 @@ public class Main extends HeapProcess {
 			case CONTROL_SETTINGS: processControlSettings(); break;
 			default: parser.write("Unknown tag type: " + tagType); parser.skipNbytes(dataLen);
 			}
-			parser.flush();
+			if(DEBUG)
+				parser.flush();
 		}
 	}
 
@@ -80,7 +78,8 @@ public class Main extends HeapProcess {
 		parser.write("ID: " + ID);
 		parser.flush();
 		byte str[] = parser.readNBytes(dataLen - idSize);
-		parser.write("TAG_STRING: " + new String(str));
+		parser.write("TAG_STRING: " + new String(str, Charset.forName("UTF-8")));
+		parser.flush();
 	}
 
 	/**
@@ -255,12 +254,14 @@ public class Main extends HeapProcess {
 
 	private static void processHeapDump() throws IOException {
 		// TODO Auto-generated method stub
-		parser.skipNbytes(dataLen);
+//		parser.skipNbytes(dataLen);
+		processHeapTag();
 	}
 
 	private static void processHeapDumpSeg() throws IOException {
 		// TODO Auto-generated method stub
-		parser.skipNbytes(dataLen);
+//		parser.skipNbytes(dataLen);
+		processHeapTag();
 	}
 
 	/**
